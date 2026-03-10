@@ -1,22 +1,24 @@
 # Change Summary
 
 ## Files changed
-- `core/config/settings.py` — **bugfix/hardening**
-  - Added strict env boolean parsing.
-  - Added queue model validation and normalization.
-  - Added cross-field safety checks for live/canary modes.
+- `Makefile` — **tooling/alignment**
+  - Added `typecheck` and `ci` targets to match documented local/CI quality workflows.
 - `tests/unit/test_settings.py` — **test**
-  - Added six regression tests covering startup config safety and parsing.
-- `tests/clmm/test_clmm_math.py` — **test cleanup**
-  - Renamed ambiguous variable to satisfy lint quality gate.
-- `onchain/strategies/amm_lp/out_of_range_recovery.py` — **typing fix**
-  - Replaced weakly typed `options.get` key function with typed lambda.
-- `pyproject.toml` — **tooling/config**
-  - Added mypy configuration to support current package layout.
+  - Added regression test for `LIVE_AUTO` approvals invariant.
+- `docs/repo_audit/INTERFACE_MAP.md` — **docs/contract audit**
+  - Enumerated concrete `/ops/*` endpoint contracts to match backend router.
+- `docs/testing/TEST_PLAN.md` — **docs/testing**
+  - Added `make ci` and ops API contract subset command; updated run matrix.
+- `docs/testing/TEST_RUN_RESULTS.md` — **evidence**
+  - Replaced with final consistency-pass command results and fixes applied.
+- `docs/testing/TEST_MATRIX.md` — **evidence**
+  - Updated before/after statuses and added Makefile command-orchestration row.
+- `docs/testing/REGRESSION_TESTS_ADDED.md` — **evidence**
+  - Updated to include new `LIVE_AUTO` invariant test.
+- `docs/testing/CI_ALIGNMENT.md` — **docs/ci**
+  - Updated to reflect Makefile `ci` target and equivalent split commands.
 - `README.md` — **docs**
-  - Replaced stale quickstart assumptions, documented actual run/test commands and known limitations.
-- `docs/repo_audit/*`, `docs/testing/*` — **audit + evidence docs**
-  - Added architecture map, subsystem inventory, interface map, config surface, gap report, testing plan/results/matrix, CI alignment, and risk tracking.
+  - Updated testing section to use `make ci` as canonical local gate.
 
 ## Rationale
-This pass prioritized startup/runtime safety, static-analysis reliability, and evidence-based repository documentation while preserving existing architecture and tests.
+This pass focused on consistency verification between docs, backend contracts, config behavior, test intent, and local/CI command surfaces.

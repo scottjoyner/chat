@@ -44,13 +44,12 @@ python -m apps.replay_engine.runner --fixture apps/replay_engine/fixtures/maker_
 
 ## Testing and checks
 ```bash
-# Unit/integration/replay tests
+# Full local quality gate
+make ci
+
+# Or run individually
 pytest -q
-
-# Lint
 ruff check .
-
-# Type-check
 mypy .
 ```
 

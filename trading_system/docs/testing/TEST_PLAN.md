@@ -10,7 +10,9 @@
 ## Canonical local commands
 | Category | Command | Dependencies | Runtime (observed) | Pass criteria | Run in this pass |
 |---|---|---|---|---|---|
+| Unified local gate | `make ci` | Python deps + Makefile | ~25-35s | lint + typecheck + tests pass | Yes |
 | Full pytest suite | `pytest -q` | Python deps installed | ~2-4s | All tests pass | Yes |
+| API contract integration subset | `pytest -q tests/integration/test_ops_api.py` | FastAPI test deps | <1s | All ops API integration tests pass | Yes |
 | Lint | `ruff check .` | ruff | <1s | No violations | Yes |
 | Type-check | `mypy .` | mypy | ~20-25s | No type errors | Yes |
 
@@ -26,5 +28,6 @@
 ## Critical no-regression areas
 - Risk mode gating and trust-score behavior.
 - Settings/env validation for live/canary safety paths.
+- Ops API typed response contracts (`/ops/*`) consumed by operator UI.
 - Onchain route analysis and approval packet generation.
 - Replay/backtest runners and fixture parsing.

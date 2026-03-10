@@ -4,8 +4,13 @@ install:
 lint:
 	ruff check .
 
+typecheck:
+	mypy .
+
 test:
 	pytest -q
+
+ci: lint typecheck test
 
 api:
 	uvicorn apps.api.main:app --reload --host 0.0.0.0 --port 8000

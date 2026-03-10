@@ -32,6 +32,8 @@
 - Fix lint issue blocking `ruff check`. ✅
 - Make mypy executable in this mixed-package repo (`explicit_package_bases`, import handling). ✅
 - Update README + testing docs to match actual runnable commands. ✅
+- Align Makefile targets with documented CI/local commands (`make ci`). ✅
+- Expand interface map to concrete `/ops/*` backend contract paths. ✅
 
 ### P2 improve if time allows
 - Implement readiness probes and persistence-backed ops store.

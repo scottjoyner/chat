@@ -16,14 +16,35 @@
   - `/onchain/hedge/coinbase`
   - `/onchain/profit/sweep`
 
-## Operator API contracts (`apps/api/ops_layer.py`)
-- Typed Pydantic read models for:
-  - dashboard snapshot/delta
-  - portfolio details
-  - treasury transfer preview + execution request
-  - order preview + submit
-  - feed health and strategy status
-- Boundary is currently **in-memory store**, no DB-backed persistence.
+## Operator API contracts (`apps/api/ops_layer.py`, prefix `/ops`)
+- Dashboard and feed endpoints:
+  - `GET /ops/dashboard/snapshot`
+  - `GET /ops/dashboard/delta`
+  - `GET /ops/feeds/health`
+- Portfolio + treasury endpoints:
+  - `GET /ops/portfolios`
+  - `GET /ops/portfolios/{portfolio_id}`
+  - `POST /ops/treasury/preview`
+  - `POST /ops/treasury/execute`
+- Liquidity/order endpoints:
+  - `GET /ops/liquidity/map`
+  - `GET /ops/liquidity/recommendations`
+  - `POST /ops/orders/preview`
+  - `POST /ops/orders/submit`
+  - `GET /ops/orders/open`
+  - `POST /ops/orders/{order_id}/cancel`
+  - `GET /ops/fills`
+- Strategy/ops UI endpoints:
+  - `POST /ops/strategies/backtest/start`
+  - `POST /ops/strategies/{strategy_id}/start`
+  - `GET /ops/strategies/outcomes/realtime`
+  - `GET /ops/ui/theme`
+  - `GET /ops/ui/labels`
+  - `GET /ops/risk/summary`
+  - `GET /ops/approvals`
+  - `GET /ops/alerts`
+  - `GET /ops/incidents`
+  - `GET /ops/audit`
 
 ## Websocket/realtime contracts
 - No websocket endpoints are exposed in FastAPI entrypoints during this pass; realtime semantics are represented as pollable typed responses in ops layer.

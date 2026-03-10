@@ -40,3 +40,8 @@ def test_canary_rollout_restricted_to_canary_mode() -> None:
 def test_queue_model_is_normalized() -> None:
     settings = Settings(queue_model="PRO_RATA")
     assert settings.queue_model == "pro_rata"
+
+
+def test_live_auto_requires_approvals() -> None:
+    with pytest.raises(ValueError, match="LIVE_AUTO requires"):
+        Settings(trading_mode=TradingMode.LIVE_AUTO, live_trading_enabled=True, require_approvals=False)
