@@ -9,4 +9,4 @@ def recovery_decision(immediate_reposition_edge: Decimal, hold_edge: Decimal, wi
         "hold": hold_edge,
         "withdraw": withdraw_edge,
     }
-    return max(options, key=options.get)
+    return max(options, key=lambda option: options[option])

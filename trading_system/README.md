@@ -3,30 +3,66 @@
 Production-oriented modular scaffold for a Coinbase-focused algorithmic trading and research platform with explicit risk and approvals.
 
 ## Highlights
-- Event-driven modular architecture with API, worker, backtester, replay engine, and paper exchange apps
-- Expanded risk model with explicit high-risk modes and mode-specific gating
-- Exchange reconciliation hardening with trust score (`HEALTHY/DEGRADED/UNTRUSTED`)
-- Queue-position-aware execution model interface for replay/backtests
-- Compute backend router (NumPy first, optional CuPy/PyTorch fallback)
-- Strategy plugin interface and **50+ registered strategies/modules/overlays**
-- Experiment tracker with reproducible run manifests
-- Voice-agent approval payload support and operational notification categories
+- Modular runtime apps: API, worker, backtester, replay engine, and paper exchange runners.
+- Risk engine with explicit mode gating and exchange trust state integration.
+- Onchain route analysis + approval packet generation path.
+- Strategy registry with broad catalog and replay/backtest utilities.
+- Test suite spanning unit, integration, replay/sim, and performance-smoke checks.
 
-## Quickstart
+## Repository layout
+- `apps/`: runtime entrypoints.
+- `core/`, `risk/`, `execution/`, `exchange/`, `portfolio/`: core trading subsystems.
+- `onchain/`: onchain simulation/security/strategy modules.
+- `tests/`: automated test suites.
+- `docs/`: architecture, operations, and audit/testing evidence.
+
+## Local setup
 ```bash
 cd trading_system
-cp .env.example .env
 pip install -e .[dev]
-pytest -q
-uvicorn apps.api.main:app --reload
 ```
 
-## Operator API
-See `/docs` and OpenAPI served by FastAPI at `/docs`.
+Optional local infra for API dependencies:
+```bash
+docker compose up -d postgres redis
+```
 
-## Safety Defaults
-- Live trading disabled by default
-- Approval required mode available
-- Locked reserve is non-tradable
-- `RESEARCH_ONLY` mode cannot submit live orders
-- `UNTRUSTED` exchange trust score blocks risk-increasing orders
+## Run services
+```bash
+# API
+uvicorn apps.api.main:app --reload --host 0.0.0.0 --port 8000
+
+# Worker
+python -m apps.worker.main
+
+# Backtest demo
+python -m apps.backtester.runner --config configs/backtest_demo.yaml
+
+# Replay demo
+python -m apps.replay_engine.runner --fixture apps/replay_engine/fixtures/maker_toxic_flow.jsonl
+```
+
+## Testing and checks
+```bash
+# Unit/integration/replay tests
+pytest -q
+
+# Lint
+ruff check .
+
+# Type-check
+mypy .
+```
+
+See `docs/testing/TEST_PLAN.md` and `docs/testing/TEST_RUN_RESULTS.md` for tested commands, scope, and caveats.
+
+## Safety defaults
+- Live trading disabled by default.
+- Live modes require explicit `LIVE_TRADING_ENABLED=true`.
+- `TRADING_MODE=CANARY` requires non-zero `CANARY_ROLLOUT_PCT`.
+- `QUEUE_MODEL` constrained to `simple`, `priority`, or `pro_rata`.
+
+## Known limitations
+- Ops API state is in-memory only (non-persistent).
+- No repository CI workflow is currently defined.
+- Alembic migration scaffolding is partial (`alembic/env.py` missing).
