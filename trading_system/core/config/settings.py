@@ -1,5 +1,6 @@
 import os
 from enum import Enum
+
 from pydantic import BaseModel
 
 
@@ -9,6 +10,8 @@ class TradingMode(str, Enum):
     LIVE_APPROVAL_REQUIRED = "LIVE_APPROVAL_REQUIRED"
     LIVE_SEMI_AUTO = "LIVE_SEMI_AUTO"
     LIVE_AUTO = "LIVE_AUTO"
+    SHADOW = "SHADOW"
+    CANARY = "CANARY"
 
 
 class Settings(BaseModel):
@@ -22,6 +25,10 @@ class Settings(BaseModel):
     redis_url: str = "redis://localhost:6379/0"
     require_approvals: bool = True
     live_trading_enabled: bool = False
+    low_latency_mode: bool = False
+    gpu_enabled: bool = False
+    queue_model: str = "simple"
+    canary_rollout_pct: float = 0.0
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -36,6 +43,10 @@ class Settings(BaseModel):
             redis_url=os.getenv("REDIS_URL", "redis://localhost:6379/0"),
             require_approvals=os.getenv("REQUIRE_APPROVALS", "true").lower() == "true",
             live_trading_enabled=os.getenv("LIVE_TRADING_ENABLED", "false").lower() == "true",
+            low_latency_mode=os.getenv("LOW_LATENCY_MODE", "false").lower() == "true",
+            gpu_enabled=os.getenv("GPU_ENABLED", "false").lower() == "true",
+            queue_model=os.getenv("QUEUE_MODEL", "simple"),
+            canary_rollout_pct=float(os.getenv("CANARY_ROLLOUT_PCT", "0")),
         )
 
     def validate_safety(self) -> None:
