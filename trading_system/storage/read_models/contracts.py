@@ -17,6 +17,11 @@ class DashboardReadModel(BaseModel):
     daily_pnl: float
     risk_mode: str
     exchange_trust_state: str
+    liquidity_availability_score: float
+    idle_capital_score: float
+    working_capital_score: float
+    feed_health_summary: list[dict]
+    active_issues: list[dict]
 
 
 class PortfolioReadModel(BaseModel):
@@ -39,3 +44,20 @@ class OpenOrdersReadModel(BaseModel):
 class ApprovalQueueReadModel(BaseModel):
     pending_count: int
     urgent_count: int
+
+
+class StrategyOutcomeReadModel(BaseModel):
+    strategy_id: str
+    status: str
+    pnl_1h: float
+    fill_quality_score: float
+    consumed_capital: float
+    latest_decision: str
+
+
+class ThemeSettingsReadModel(BaseModel):
+    mode: str
+    lightweight: bool
+    animation_level: str
+    table_density: str
+    chart_render_mode: str

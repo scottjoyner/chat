@@ -5,6 +5,8 @@ from .contracts import (
     OpenOrdersReadModel,
     PortfolioReadModel,
     ReadModelEnvelope,
+    StrategyOutcomeReadModel,
+    ThemeSettingsReadModel,
 )
 
 __all__ = [
@@ -14,4 +16,6 @@ __all__ = [
     "OpenOrdersReadModel",
     "PortfolioReadModel",
     "ReadModelEnvelope",
+    "StrategyOutcomeReadModel",
+    "ThemeSettingsReadModel",
 ]

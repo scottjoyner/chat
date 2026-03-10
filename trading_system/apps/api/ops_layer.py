@@ -17,10 +17,45 @@ class CapitalStatus(str, Enum):
     PENDING = "pending"
 
 
+class FeedState(str, Enum):
+    HEALTHY = "healthy"
+    DEGRADED = "degraded"
+    STALE = "stale"
+
+
+class ThemeMode(str, Enum):
+    DARK = "dark"
+    LIGHT = "light"
+
+
 class CapitalBucketView(BaseModel):
     name: str
     amount: float
     status: CapitalStatus
+
+
+class FeedHealth(BaseModel):
+    feed: str
+    state: FeedState
+    freshness_ms: int
+    update_rate_hz: float
+    dropped_messages_1m: int
+    failover_active: bool
+
+
+class DashboardIssue(BaseModel):
+    issue_id: str
+    severity: Literal["low", "medium", "high", "critical"]
+    title: str
+    impacted_entities: list[str]
+    recommended_action: str
+
+
+class ActionShortcut(BaseModel):
+    action_id: str
+    label: str
+    requires_approval: bool
+    endpoint: str
 
 
 class PortfolioSummary(BaseModel):
@@ -49,8 +84,23 @@ class DashboardSnapshot(BaseModel):
     approval_queue: int
     latency_health: float
     reconciliation_health: float
+    liquidity_availability_score: float
+    idle_capital_score: float
+    working_capital_score: float
     capital_buckets: list[CapitalBucketView]
+    feed_health: list[FeedHealth]
+    active_issues: list[DashboardIssue]
+    quick_actions: list[ActionShortcut]
     portfolios: list[PortfolioSummary]
+
+
+class DashboardDelta(BaseModel):
+    generated_at: datetime
+    nav_delta_5m: float
+    pnl_delta_5m: float
+    fills_delta_5m: int
+    open_orders_delta_5m: int
+    new_issues: list[DashboardIssue]
 
 
 class PortfolioDetail(BaseModel):
@@ -167,6 +217,38 @@ class FillRecord(BaseModel):
     at: datetime
 
 
+class ThemeSettings(BaseModel):
+    mode: ThemeMode
+    lightweight: bool
+    animation_level: Literal["none", "reduced", "standard"]
+    table_density: Literal["compact", "standard"]
+    chart_render_mode: Literal["canvas", "svg"]
+
+
+class BacktestRequest(BaseModel):
+    strategy_id: str
+    universe: list[str]
+    lookback_days: int = Field(ge=1, le=365)
+    capital: float = Field(gt=0)
+
+
+class StrategyActionResponse(BaseModel):
+    task_id: str
+    strategy_id: str
+    status: Literal["queued", "running", "completed"]
+    queued_at: datetime
+
+
+class RealtimeStrategyOutcome(BaseModel):
+    strategy_id: str
+    status: Literal["running", "paused", "cooldown"]
+    pnl_1h: float
+    fill_quality_score: float
+    consumed_capital: float
+    latest_decision: str
+    at: datetime
+
+
 class InMemoryOpsStore:
     def __init__(self) -> None:
         self.portfolios: dict[str, PortfolioDetail] = {}
@@ -174,6 +256,10 @@ class InMemoryOpsStore:
         self.orders: dict[str, OrderRecord] = {}
         self.fills: list[FillRecord] = []
         self.audit_events: list[dict] = []
+        self.feed_health: list[FeedHealth] = []
+        self.strategy_runs: dict[str, StrategyActionResponse] = {}
+        self.strategy_outcomes: list[RealtimeStrategyOutcome] = []
+        self.theme = ThemeSettings(mode=ThemeMode.DARK, lightweight=True, animation_level="reduced", table_density="compact", chart_render_mode="canvas")
         self._seed()
 
     def _seed(self) -> None:
@@ -217,9 +303,62 @@ class InMemoryOpsStore:
             risk_budget_used=0.42,
             what_changed={"5m": -0.001, "1h": 0.002, "1d": -0.006, "session": -0.002},
         )
+        self.feed_health = [
+            FeedHealth(feed="coinbase_market_data", state=FeedState.HEALTHY, freshness_ms=140, update_rate_hz=31.5, dropped_messages_1m=0, failover_active=False),
+            FeedHealth(feed="coinbase_orders", state=FeedState.HEALTHY, freshness_ms=180, update_rate_hz=8.7, dropped_messages_1m=1, failover_active=False),
+            FeedHealth(feed="risk_read_model", state=FeedState.DEGRADED, freshness_ms=920, update_rate_hz=2.1, dropped_messages_1m=4, failover_active=True),
+        ]
+        self.strategy_outcomes = [
+            RealtimeStrategyOutcome(
+                strategy_id="adaptive_spread_mm",
+                status="running",
+                pnl_1h=3200,
+                fill_quality_score=0.84,
+                consumed_capital=690_000,
+                latest_decision="tighten_quotes_due_to_improving_depth",
+                at=datetime.now(timezone.utc),
+            ),
+            RealtimeStrategyOutcome(
+                strategy_id="hybrid_hedge",
+                status="running",
+                pnl_1h=910,
+                fill_quality_score=0.78,
+                consumed_capital=280_000,
+                latest_decision="increase_hedge_ratio_for_btc_inventory",
+                at=datetime.now(timezone.utc),
+            ),
+        ]
+
+    def dashboard_issues(self) -> list[DashboardIssue]:
+        issues: list[DashboardIssue] = []
+        stale_or_degraded = [f for f in self.feed_health if f.state != FeedState.HEALTHY]
+        if stale_or_degraded:
+            issues.append(
+                DashboardIssue(
+                    issue_id="issue-feed-quality",
+                    severity="medium",
+                    title="One or more realtime feeds are degraded",
+                    impacted_entities=[f.feed for f in stale_or_degraded],
+                    recommended_action="Switch to conservative routing and inspect feed failover lanes.",
+                )
+            )
+        if any(p.summary.available_capital < 200_000 for p in self.portfolios.values()):
+            issues.append(
+                DashboardIssue(
+                    issue_id="issue-capital-low",
+                    severity="high",
+                    title="Portfolio available capital below threshold",
+                    impacted_entities=[p.summary.portfolio_id for p in self.portfolios.values() if p.summary.available_capital < 200_000],
+                    recommended_action="Trigger treasury replenish preview before new strategy allocations.",
+                )
+            )
+        return issues
 
     def dashboard(self) -> DashboardSnapshot:
         portfolio_summaries = [d.summary for d in self.portfolios.values()]
+        idle = 750_000
+        working = 1_450_000
+        total = idle + working + 900_000 + 500_000 + 125_000
         return DashboardSnapshot(
             generated_at=datetime.now(timezone.utc),
             total_nav=sum(p.nav for p in portfolio_summaries),
@@ -228,17 +367,27 @@ class InMemoryOpsStore:
             unrealized_pnl=sum(p.unrealized_pnl for p in portfolio_summaries),
             risk_mode="MARKET_MAKING_PRO",
             exchange_trust_state="HEALTHY",
-            open_orders=len(self.orders),
+            open_orders=len([o for o in self.orders.values() if o.status == "open"]),
             fills_last_15m=len(self.fills),
             approval_queue=2,
             latency_health=0.96,
             reconciliation_health=0.98,
+            liquidity_availability_score=round((working + idle) / total, 4),
+            idle_capital_score=round(idle / total, 4),
+            working_capital_score=round(working / total, 4),
             capital_buckets=[
                 CapitalBucketView(name="locked_reserve", amount=900_000, status=CapitalStatus.LOCKED),
                 CapitalBucketView(name="active_trading", amount=1_450_000, status=CapitalStatus.WORKING),
                 CapitalBucketView(name="hedging", amount=500_000, status=CapitalStatus.HEDGED),
                 CapitalBucketView(name="cash_buffer", amount=750_000, status=CapitalStatus.IDLE),
                 CapitalBucketView(name="pending_transfer", amount=125_000, status=CapitalStatus.PENDING),
+            ],
+            feed_health=self.feed_health,
+            active_issues=self.dashboard_issues(),
+            quick_actions=[
+                ActionShortcut(action_id="preview_treasury_move", label="Preview Treasury Move", requires_approval=True, endpoint="/ops/treasury/preview"),
+                ActionShortcut(action_id="preview_order", label="Preview Order", requires_approval=False, endpoint="/ops/orders/preview"),
+                ActionShortcut(action_id="start_strategy_backtest", label="Start Strategy Backtest", requires_approval=False, endpoint="/ops/strategies/backtest/start"),
             ],
             portfolios=portfolio_summaries,
         )
@@ -251,6 +400,23 @@ router = APIRouter(prefix="/ops", tags=["ops"])
 @router.get("/dashboard/snapshot", response_model=DashboardSnapshot)
 def dashboard_snapshot() -> DashboardSnapshot:
     return store.dashboard()
+
+
+@router.get("/dashboard/delta", response_model=DashboardDelta)
+def dashboard_delta() -> DashboardDelta:
+    return DashboardDelta(
+        generated_at=datetime.now(timezone.utc),
+        nav_delta_5m=21_200,
+        pnl_delta_5m=1_240,
+        fills_delta_5m=14,
+        open_orders_delta_5m=3,
+        new_issues=store.dashboard_issues(),
+    )
+
+
+@router.get("/feeds/health", response_model=list[FeedHealth])
+def feeds_health() -> list[FeedHealth]:
+    return store.feed_health
 
 
 @router.get("/portfolios", response_model=list[PortfolioSummary])
@@ -296,6 +462,8 @@ def treasury_execute(req: TreasuryTransferExecuteRequest) -> dict:
     destination = store.portfolios.get(preview.destination_portfolio)
     if not source or not destination:
         raise HTTPException(status_code=404, detail="portfolio not found")
+    if source.summary.available_capital < preview.amount:
+        raise HTTPException(status_code=400, detail="insufficient available capital in source portfolio")
 
     source.summary.available_capital -= preview.amount
     destination.summary.available_capital += preview.amount
@@ -414,6 +582,62 @@ def cancel_order(order_id: str) -> dict:
 @router.get("/fills", response_model=list[FillRecord])
 def fills() -> list[FillRecord]:
     return store.fills
+
+
+@router.post("/strategies/backtest/start", response_model=StrategyActionResponse)
+def start_backtest(req: BacktestRequest) -> StrategyActionResponse:
+    task = StrategyActionResponse(
+        task_id=f"bt-{uuid4().hex[:10]}",
+        strategy_id=req.strategy_id,
+        status="queued",
+        queued_at=datetime.now(timezone.utc),
+    )
+    store.strategy_runs[task.task_id] = task
+    store.audit_events.append(
+        {
+            "type": "strategy_backtest_started",
+            "task_id": task.task_id,
+            "strategy_id": req.strategy_id,
+            "lookback_days": req.lookback_days,
+            "capital": req.capital,
+        }
+    )
+    return task
+
+
+@router.post("/strategies/{strategy_id}/start", response_model=StrategyActionResponse)
+def start_strategy(strategy_id: str) -> StrategyActionResponse:
+    task = StrategyActionResponse(
+        task_id=f"strat-{uuid4().hex[:10]}",
+        strategy_id=strategy_id,
+        status="running",
+        queued_at=datetime.now(timezone.utc),
+    )
+    store.strategy_runs[task.task_id] = task
+    store.audit_events.append({"type": "strategy_started", "task_id": task.task_id, "strategy_id": strategy_id})
+    return task
+
+
+@router.get("/strategies/outcomes/realtime", response_model=list[RealtimeStrategyOutcome])
+def strategy_outcomes_realtime() -> list[RealtimeStrategyOutcome]:
+    return store.strategy_outcomes
+
+
+@router.get("/ui/theme", response_model=ThemeSettings)
+def theme_settings() -> ThemeSettings:
+    return store.theme
+
+
+@router.get("/ui/labels")
+def ui_labels() -> dict[str, str]:
+    return {
+        "portfolio": "portfolios",
+        "strategy": "strategies",
+        "order": "orders",
+        "fill": "fills",
+        "approval": "approvals",
+        "incident": "incidents",
+    }
 
 
 @router.get("/risk/summary")
