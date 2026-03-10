@@ -1,18 +1,15 @@
-from strategies.base.interfaces import Strategy, StrategySignal
+from strategies.base import BaseSignalStrategy, StrategyConfig, StrategyMetadata
 
 
-class RegimeSwitchingEnsembleAllocator(Strategy):
-    strategy_id = "RegimeSwitchingEnsembleAllocator"
-
-    def metadata(self) -> dict:
-        return {"name": self.strategy_id, "paper_mode": True, "live_supported": True}
-
-    def generate_signal(self, market_state: dict) -> StrategySignal | None:
-        product = market_state.get("product_id", "BTC-USD")
-        score = float(market_state.get("score", 0.0))
-        if score <= 0:
-            return None
-        return StrategySignal(strategy_id=self.strategy_id, product_id=product, score=score, reason="sample positive score")
-
-    def explain_trade(self, signal: StrategySignal) -> str:
-        return f"{self.strategy_id} proposes trade on {signal.product_id} with score {signal.score}"
+class RegimeSwitchingEnsembleAllocator(BaseSignalStrategy):
+    def __init__(self) -> None:
+        super().__init__(
+            metadata=StrategyMetadata(
+                strategy_id="RegimeSwitchingEnsembleAllocator",
+                strategy_type="ensemble",
+                live_supported=False,
+                data_requirements=["product_id", "score", "regime", "strategy_quality", "warmup_complete"],
+                risk_mode_hint="NORMAL",
+            ),
+            config=StrategyConfig(threshold=0.3, cooldown_seconds=30, warmup_period=200),
+        )

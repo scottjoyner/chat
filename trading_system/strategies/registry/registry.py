@@ -33,4 +33,13 @@ def load_strategies() -> list:
         BasisCarryDerivativesStrategy(),
     ]
     advanced = [GenericSpecStrategy(spec) for spec in advanced_specs()]
-    return base + advanced
+    strategies = base + advanced
+
+    ids = [s.strategy_id for s in strategies]
+    if len(ids) != len(set(ids)):
+        raise ValueError("duplicate strategy_id detected in registry")
+    return strategies
+
+
+def strategy_metadata_index() -> dict[str, dict]:
+    return {strategy.strategy_id: strategy.metadata() for strategy in load_strategies()}

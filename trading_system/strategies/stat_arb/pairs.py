@@ -1,18 +1,15 @@
-from strategies.base.interfaces import Strategy, StrategySignal
+from strategies.base import BaseSignalStrategy, StrategyConfig, StrategyMetadata
 
 
-class PairsTradingStrategy(Strategy):
-    strategy_id = "PairsTradingStrategy"
-
-    def metadata(self) -> dict:
-        return {"name": self.strategy_id, "paper_mode": True, "live_supported": True}
-
-    def generate_signal(self, market_state: dict) -> StrategySignal | None:
-        product = market_state.get("product_id", "BTC-USD")
-        score = float(market_state.get("score", 0.0))
-        if score <= 0:
-            return None
-        return StrategySignal(strategy_id=self.strategy_id, product_id=product, score=score, reason="sample positive score")
-
-    def explain_trade(self, signal: StrategySignal) -> str:
-        return f"{self.strategy_id} proposes trade on {signal.product_id} with score {signal.score}"
+class PairsTradingStrategy(BaseSignalStrategy):
+    def __init__(self) -> None:
+        super().__init__(
+            metadata=StrategyMetadata(
+                strategy_id="PairsTradingStrategy",
+                strategy_type="stat_arb",
+                live_supported=False,
+                data_requirements=["product_id", "score", "spread", "hedge_ratio", "warmup_complete"],
+                risk_mode_hint="AGGRESSIVE",
+            ),
+            config=StrategyConfig(threshold=0.2, cooldown_seconds=10, warmup_period=100),
+        )

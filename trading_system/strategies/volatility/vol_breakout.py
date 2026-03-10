@@ -1,18 +1,15 @@
-from strategies.base.interfaces import Strategy, StrategySignal
+from strategies.base import BaseSignalStrategy, StrategyConfig, StrategyMetadata
 
 
-class VolatilityBreakoutStrategy(Strategy):
-    strategy_id = "VolatilityBreakoutStrategy"
-
-    def metadata(self) -> dict:
-        return {"name": self.strategy_id, "paper_mode": True, "live_supported": True}
-
-    def generate_signal(self, market_state: dict) -> StrategySignal | None:
-        product = market_state.get("product_id", "BTC-USD")
-        score = float(market_state.get("score", 0.0))
-        if score <= 0:
-            return None
-        return StrategySignal(strategy_id=self.strategy_id, product_id=product, score=score, reason="sample positive score")
-
-    def explain_trade(self, signal: StrategySignal) -> str:
-        return f"{self.strategy_id} proposes trade on {signal.product_id} with score {signal.score}"
+class VolatilityBreakoutStrategy(BaseSignalStrategy):
+    def __init__(self) -> None:
+        super().__init__(
+            metadata=StrategyMetadata(
+                strategy_id="VolatilityBreakoutStrategy",
+                strategy_type="volatility",
+                live_supported=True,
+                data_requirements=["product_id", "score", "atr", "realized_vol", "warmup_complete"],
+                risk_mode_hint="AGGRESSIVE",
+            ),
+            config=StrategyConfig(threshold=0.25, cooldown_seconds=4, warmup_period=40),
+        )
