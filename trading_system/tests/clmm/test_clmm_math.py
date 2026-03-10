@@ -17,8 +17,8 @@ def test_tick_price_roundtrip():
 
 
 def test_liquidity_amount_roundtrip():
-    l = liquidity_from_amounts(Decimal("1"), Decimal("2000"), Decimal("2000"), Decimal("1800"), Decimal("2200"))
-    a0, a1 = amounts_from_liquidity(l, Decimal("2000"), Decimal("1800"), Decimal("2200"))
+    liquidity = liquidity_from_amounts(Decimal("1"), Decimal("2000"), Decimal("2000"), Decimal("1800"), Decimal("2200"))
+    a0, a1 = amounts_from_liquidity(liquidity, Decimal("2000"), Decimal("1800"), Decimal("2200"))
     assert a0 >= 0 and a1 >= 0
 
 
