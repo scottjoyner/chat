@@ -15,6 +15,7 @@ from onchain.strategies.hedging.hybrid_hedge import HybridHedgeLinker
 from onchain.strategies.treasury.profit_sweep import ProfitCaptureEngine
 from risk.engine import RiskEngine, RiskPolicy
 from strategies.registry.registry import load_strategies
+from apps.api.ops_layer import router as ops_router
 
 app = FastAPI(title="Trading System Control API")
 settings = Settings.from_env()
@@ -172,3 +173,6 @@ def bootstrap_base_examples() -> dict:
         capital_at_risk=2_500,
     )
     return {"plan": plan.model_dump()}
+
+
+app.include_router(ops_router)
