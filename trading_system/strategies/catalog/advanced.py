@@ -8,6 +8,7 @@ from strategies.base.interfaces import Strategy, StrategySignal
 @dataclass(frozen=True)
 class StrategySpec:
     strategy_id: str
+    mapped_implementation: str | None
     canonical_name: str
     family: str
     purpose: str
@@ -197,33 +198,38 @@ def _family(index: int) -> str:
     return "research"
 
 
+IMPLEMENTATION_MAP: dict[str, str] = {
+    "Multi-timeframe breakout": "TrendFollowingBreakoutStrategy",
+    "Z-score mean reversion": "MeanReversionZScoreStrategy",
+    "Cross-sectional momentum rotation": "CrossSectionalRelativeStrengthStrategy",
+    "Stair-step market maker": "StairStepMarketMakerStrategy",
+    "Adaptive spread market maker": "AdaptiveSpreadMMStrategy",
+    "Range-bound fade": "GridRebalanceCaptureStrategy",
+    "Order book imbalance strategy": "OrderBookImbalanceStrategy",
+    "VWAP execution algo": "VwapTwapExecutionStrategy",
+    "TWAP execution algo": "VwapTwapExecutionStrategy",
+    "Pairs trading with fixed hedge ratio": "PairsTradingStrategy",
+    "Realized-vol breakout": "VolatilityBreakoutStrategy",
+    "Regime-switching allocator": "RegimeSwitchingEnsembleAllocator",
+    "Dynamic reserve deployment allocator": "LongHorizonDcaStrategy",
+    "Liquidity vacuum snapback": "LiquidityVacuumSnapbackStrategy",
+    "Basis arbitrage": "BasisCarryDerivativesStrategy",
+}
+
+PARTIAL_MAP: set[str] = {
+    "Trend pullback continuation",
+    "Opening-range breakout",
+    "Cointegration basket arbitrage",
+    "Maker-taker switcher",
+    "Adaptive participation algo",
+    "Meta-strategy selector",
+}
+
+
 def _status(name: str) -> tuple[str, bool, bool, bool, bool, bool]:
-    implemented = {
-        "Z-score mean reversion",
-        "Cross-sectional momentum rotation",
-        "Stair-step market maker",
-        "Adaptive spread market maker",
-        "Order book imbalance strategy",
-        "VWAP execution algo",
-        "TWAP execution algo",
-        "Pairs trading with fixed hedge ratio",
-        "Realized-vol breakout",
-        "Regime-switching allocator",
-        "Liquidity vacuum snapback",
-        "Basis arbitrage",
-        "Crash-response opportunistic accumulator",
-    }
-    partial = {
-        "Trend pullback continuation",
-        "Opening-range breakout",
-        "Cointegration basket arbitrage",
-        "Maker-taker switcher",
-        "Adaptive participation algo",
-        "Meta-strategy selector",
-    }
-    if name in implemented:
+    if name in IMPLEMENTATION_MAP:
         return ("implemented", True, True, True, True, True)
-    if name in partial:
+    if name in PARTIAL_MAP:
         return ("partial", False, True, True, True, False)
     return ("research_only", False, False, False, True, False)
 
@@ -252,6 +258,7 @@ def advanced_specs() -> list[StrategySpec]:
         specs.append(
             StrategySpec(
                 strategy_id=strategy_id,
+                mapped_implementation=IMPLEMENTATION_MAP.get(name),
                 canonical_name=name,
                 family=family,
                 purpose=f"{family} alpha or execution objective for {name.lower()}",

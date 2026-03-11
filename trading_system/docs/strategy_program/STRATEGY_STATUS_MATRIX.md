@@ -1,8 +1,8 @@
 # STRATEGY_STATUS_MATRIX
 
-| Strategy | Status | Unit Tested | Backtest Ready | Replay Ready | Paper Ready | Live Safe |
+| Strategy | Implementation | Unit Tested | Backtest Ready | Replay Ready | Paper Ready | Live Safe |
 |---|---|---|---|---|---|---|
-| Multi-timeframe breakout | research_only | False | False | False | True | False |
+| Multi-timeframe breakout | implemented | True | True | True | True | True |
 | Donchian channel breakout | research_only | False | False | False | True | False |
 | ATR channel breakout | research_only | False | False | False | True | False |
 | Moving-average crossover | research_only | False | False | False | True | False |
@@ -24,7 +24,7 @@
 | Gap-fill mean reversion | research_only | False | False | False | True | False |
 | VWAP reversion intraday | research_only | False | False | False | True | False |
 | Reversion to anchored VWAP | research_only | False | False | False | True | False |
-| Range-bound fade | research_only | False | False | False | True | False |
+| Range-bound fade | implemented | True | True | True | True | True |
 | Channel-touch reversal | research_only | False | False | False | True | False |
 | Order-block rejection reversion | research_only | False | False | False | True | False |
 | Market overextension snapback | research_only | False | False | False | True | False |
@@ -100,5 +100,5 @@
 | Strategy leaderboard allocator | research_only | False | False | False | True | False |
 | Meta-strategy selector | partial | False | True | True | True | False |
 | Profit-sweep treasury allocator | research_only | False | False | False | True | False |
-| Dynamic reserve deployment allocator | research_only | False | False | False | True | False |
-| Crash-response opportunistic accumulator | implemented | True | True | True | True | True |
+| Dynamic reserve deployment allocator | implemented | True | True | True | True | True |
+| Crash-response opportunistic accumulator | research_only | False | False | False | True | False |

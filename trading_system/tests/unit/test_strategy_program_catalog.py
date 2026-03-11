@@ -1,5 +1,6 @@
-from strategies.catalog.advanced import CATALOG_100, advanced_specs
+from strategies.catalog.advanced import CATALOG_100, IMPLEMENTATION_MAP, advanced_specs
 from strategies.catalog.config_schema import StrategyConfig, StrategyRuntimeFlags
+from strategies.registry.registry import load_strategies
 
 
 def test_catalog_has_exactly_100_named_strategies():
@@ -15,6 +16,16 @@ def test_advanced_specs_has_complete_contract():
         assert spec.risk_tier.startswith("TIER_")
         assert 0 <= spec.max_capital_fraction <= 1
         assert spec.max_size >= spec.min_size
+
+
+def test_implemented_specs_are_backed_by_concrete_registry_strategies():
+    concrete_ids = {s.strategy_id for s in load_strategies() if not hasattr(s, "spec")}
+    specs = advanced_specs()
+    for spec in specs:
+        if spec.implementation_status == "implemented":
+            assert spec.mapped_implementation is not None
+            assert spec.mapped_implementation in concrete_ids
+    assert len(IMPLEMENTATION_MAP) >= 10
 
 
 def test_strategy_config_validation_rejects_unsafe_live_enablement():
