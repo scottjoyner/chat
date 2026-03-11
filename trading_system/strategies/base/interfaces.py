@@ -57,6 +57,15 @@ class Strategy(ABC):
     @abstractmethod
     def explain_trade(self, signal: StrategySignal) -> str: ...
 
+    def sizing_hints(self, market_state: dict) -> dict[str, float | str | bool]:
+        return {}
+
+    def order_intents(self, signal: StrategySignal, market_state: dict) -> list[dict[str, float | str | bool]]:
+        return []
+
+    def risk_hints(self, market_state: dict) -> dict[str, float | str | bool]:
+        return {}
+
     def required_inputs(self) -> set[str]:
         return {"product_id", "score"}
 
@@ -78,3 +87,18 @@ class Strategy(ABC):
 
     def approvals_required(self) -> bool:
         return bool(self.metadata().get("live_supported", False))
+
+    def on_paper_fill(self, fill_event: dict) -> None:
+        return None
+
+    def replay_hooks(self) -> dict[str, str]:
+        return {}
+
+    def analytics_tags(self) -> dict[str, str]:
+        return {}
+
+    def serialize_state(self) -> dict:
+        return {}
+
+    def restore_state(self, state: dict) -> None:
+        return None

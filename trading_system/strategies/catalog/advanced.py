@@ -38,6 +38,24 @@ class StrategySpec:
     disable_criteria: list[str]
     cooldown_logic: str
     explainability_output: str
+    required_data_quality: str
+    live_prerequisites: list[str]
+    downgrade_conditions: list[str]
+    default_sizing_method: str
+    max_exposure_by_regime: float
+    take_profit_enabled: bool
+    trailing_take_profit_enabled: bool
+    profit_compounding_mode: str
+    profit_treasury_mode: str
+    profit_taking_disable_conditions: list[str]
+    emergency_profit_preservation: str
+    backtest_smoke_scenario: str
+    replay_smoke_scenario: str
+    realism_caveats: str
+    live_portability_score: float
+    fragility_score: float
+    operational_complexity_score: float
+    attribution_tags: list[str]
     backtest_caveats: str
     live_deployment_prerequisites: list[str]
     implementation_status: str
@@ -54,13 +72,31 @@ class GenericSpecStrategy(Strategy):
         self.strategy_id = spec.strategy_id
 
     def metadata(self) -> dict:
-        return asdict(self.spec)
+        metadata = asdict(self.spec)
+        metadata.update({
+            "strategy_type": self.spec.family,
+            "live_supported": self.spec.live_safe,
+            "paper_mode": self.spec.paper_ready,
+            "replay_supported": self.spec.replay_ready,
+            "backtest_supported": self.spec.backtest_ready,
+            "products": self.spec.supported_products,
+            "data_requirements": self.spec.required_data,
+            "risk_mode_hint": self.spec.risk_tier,
+            "capital_bucket": "ACTIVE_TRADING" if self.spec.family != "portfolio_treasury" else "TREASURY",
+        })
+        return metadata
 
     def generate_signal(self, market_state: dict) -> StrategySignal | None:
+        disabled, _ = self.is_disabled(market_state)
+        if disabled:
+            return None
+        if not bool(market_state.get("warmup_complete", True)):
+            return None
         product = market_state.get("product_id", self.spec.supported_products[0])
         score = float(market_state.get("score", 0.0))
         threshold = float(market_state.get("threshold", 0.1))
-        if score <= threshold:
+        estimated_edge_bps = float(market_state.get("estimated_edge_bps", abs(score) * 10.0))
+        if score <= threshold or estimated_edge_bps < self.spec.min_net_edge_bps:
             return None
         return StrategySignal(
             strategy_id=self.strategy_id,
@@ -74,6 +110,60 @@ class GenericSpecStrategy(Strategy):
             f"{self.spec.canonical_name} score={signal.score:.4f} tier={self.spec.risk_tier} "
             f"tp={self.spec.take_profit_model} edge_bps={self.spec.min_net_edge_bps}"
         )
+
+    def sizing_hints(self, market_state: dict) -> dict[str, float | str | bool]:
+        return {
+            "model": self.spec.default_sizing_method,
+            "min_size": self.spec.min_size,
+            "max_size": self.spec.max_size,
+            "max_capital_fraction": self.spec.max_capital_fraction,
+            "max_exposure_by_asset": self.spec.max_exposure_by_asset,
+            "max_exposure_by_correlated_group": self.spec.max_exposure_by_correlated_group,
+        }
+
+    def order_intents(self, signal: StrategySignal, market_state: dict) -> list[dict[str, float | str | bool]]:
+        side = "buy" if signal.score >= 0 else "sell"
+        return [
+            {
+                "strategy_id": self.strategy_id,
+                "product_id": signal.product_id,
+                "side": side,
+                "type": "limit",
+                "time_in_force": "GTC",
+                "size_hint": max(self.spec.min_size, min(abs(signal.score), self.spec.max_size)),
+                "edge_floor_bps": self.spec.min_net_edge_bps,
+            }
+        ]
+
+    def risk_hints(self, market_state: dict) -> dict[str, float | str | bool]:
+        return {
+            "risk_tier": self.spec.risk_tier,
+            "approvals_required": self.spec.approvals_required,
+            "max_turnover": self.spec.max_turnover,
+            "cooldown": self.spec.cooldown_logic,
+        }
+
+    def approvals_required(self) -> bool:
+        return self.spec.approvals_required
+
+    def is_disabled(self, market_state: dict) -> tuple[bool, str]:
+        if bool(market_state.get("risk_halt", False)):
+            return True, "risk engine halt"
+        if bool(market_state.get("stale_data", False)):
+            return True, "stale data"
+        latency_ms = float(market_state.get("latency_ms", 0.0))
+        if latency_ms > self.spec.required_latency_budget_ms:
+            return True, "latency breach"
+        drawdown = float(market_state.get("drawdown", 0.0))
+        if drawdown > 0.25:
+            return True, "drawdown breach"
+        return False, "enabled"
+
+    def replay_hooks(self) -> dict[str, str]:
+        return {"scenario": self.spec.replay_smoke_scenario, "backtest": self.spec.backtest_smoke_scenario}
+
+    def analytics_tags(self) -> dict[str, str]:
+        return {"strategy": self.spec.strategy_id, "family": self.spec.family, "tier": self.spec.risk_tier}
 
 
 CATALOG_100: list[str] = [
@@ -288,6 +378,24 @@ def advanced_specs() -> list[StrategySpec]:
                 disable_criteria=["drawdown breach", "latency breach", "risk engine halt"],
                 cooldown_logic="exponential cooldown after consecutive losses",
                 explainability_output="signal drivers, regime, sizing and risk gate verdict",
+                required_data_quality="fresh order book/trade data with outlier filters and gap checks",
+                live_prerequisites=["risk engine online", "approvals pipeline healthy", "capital buckets reconciled"],
+                downgrade_conditions=["latency above budget", "data staleness", "drawdown threshold breach"],
+                default_sizing_method="volatility_targeting",
+                max_exposure_by_regime=0.25,
+                take_profit_enabled=True,
+                trailing_take_profit_enabled=True,
+                profit_compounding_mode="sweep_partial",
+                profit_treasury_mode="daily_realized_gain_sweep",
+                profit_taking_disable_conditions=["spread blowout", "slippage shock", "fee spike"],
+                emergency_profit_preservation="high-water-mark lock + flatten on volatility spike",
+                backtest_smoke_scenario="baseline_daily_candles",
+                replay_smoke_scenario="single_session_replay",
+                realism_caveats="requires latency/slippage/partial-fill realism; portability varies by venue",
+                live_portability_score=0.55 if status == "implemented" else 0.20,
+                fragility_score=0.35 if status == "implemented" else 0.75,
+                operational_complexity_score=0.40 if family in {"execution", "portfolio_treasury"} else 0.65,
+                attribution_tags=["strategy", "sleeve", "portfolio", "regime", "product", "take_profit", "treasury_sweep"],
                 backtest_caveats="fill realism depends on latency, partial fills, and queue assumptions",
                 live_deployment_prerequisites=["unit tests", "replay smoke", "paper canary", "approvals"],
                 implementation_status=status,
