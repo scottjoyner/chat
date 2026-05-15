@@ -1,0 +1,411 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1900" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+    <linearGradient id="hardware-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a3a5c"/>
+      <stop offset="100%" style="stop-color:#0d2137"/>
+    </linearGradient>
+    <linearGradient id="docker-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d1b69"/>
+      <stop offset="100%" style="stop-color:#1a0f40"/>
+    </linearGradient>
+    <linearGradient id="storage-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1b4332"/>
+      <stop offset="100%" style="stop-color:#0d2818"/>
+    </linearGradient>
+    <linearGradient id="agent-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5c1a3a"/>
+      <stop offset="100%" style="stop-color:#370d23"/>
+    </linearGradient>
+    <linearGradient id="network-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3a3a1a"/>
+      <stop offset="100%" style="stop-color:#23230d"/>
+    </linearGradient>
+    <linearGradient id="repo-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a2a5c"/>
+      <stop offset="100%" style="stop-color:#0d1537"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#4a9eff" flood-opacity="0.3"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#4ade80" flood-opacity="0.3"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-purple" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#a78bfa" flood-opacity="0.3"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4a9eff"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4ade80"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/>
+    </marker>
+    <marker id="arrow-yellow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f87171"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="1900" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="800" y="40" text-anchor="middle" fill="#e6edf3" font-size="24" font-weight="700">High-Level System Architecture</text>
+  <text x="800" y="62" text-anchor="middle" fill="#8b949e" font-size="13">scottjoyner/x1-370 • Home Infrastructure • Agent Ecosystem</text>
+
+  <!-- ======================================== -->
+  <!-- LAYER 1: HARDWARE / PHYSICAL             -->
+  <!-- ======================================== -->
+  <rect x="40" y="80" width="1520" height="200" rx="12" fill="url(#hardware-grad)" stroke="#4a9eff" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="800" y="105" text-anchor="middle" fill="#4a9eff" font-size="14" font-weight="600" letter-spacing="2">HARDWARE / PHYSICAL LAYER</text>
+
+  <!-- Server -->
+  <rect x="70" y="120" width="340" height="140" rx="8" fill="#0d2137" stroke="#4a9eff" stroke-width="1" filter="url(#shadow)"/>
+  <text x="240" y="145" text-anchor="middle" fill="#e6edf3" font-size="13" font-weight="600">&#x2302; x1-370 Server</text>
+  <text x="240" y="165" text-anchor="middle" fill="#8b949e" font-size="11">Ubuntu 24.04 LTS</text>
+  <text x="240" y="182" text-anchor="middle" fill="#8b949e" font-size="11">Linux 6.17.0 • 24 Cores</text>
+  <text x="240" y="199" text-anchor="middle" fill="#8b949e" font-size="11">91 GB RAM • 8 GB Swap</text>
+  <text x="240" y="216" text-anchor="middle" fill="#8b949e" font-size="11">x86_64 • NVMe Storage</text>
+
+  <!-- NVMe Root -->
+  <rect x="440" y="120" width="240" height="65" rx="8" fill="#0d2137" stroke="#4a9eff" stroke-width="1" filter="url(#shadow)"/>
+  <text x="560" y="145" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">&#x1F4BE; nvme1n1p6 (Root)</text>
+  <text x="560" y="165" text-anchor="middle" fill="#8b949e" font-size="10">ext4 • /home • /var/lib/docker</text>
+
+  <!-- S Drive SSD -->
+  <rect x="440" y="200" width="240" height="60" rx="8" fill="#0d2137" stroke="#4ade80" stroke-width="1" filter="url(#shadow)"/>
+  <text x="560" y="223" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">&#x1F4BE; nvme0n1p3 (S Drive)</text>
+  <text x="560" y="243" text-anchor="middle" fill="#8b949e" font-size="10">NTFS • /media/scott/S • Neo4j data + paperclip</text>
+
+  <!-- NAS -->
+  <rect x="710" y="120" width="240" height="140" rx="8" fill="#0d2137" stroke="#4ade80" stroke-width="1" filter="url(#shadow)"/>
+  <text x="830" y="145" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">&#x1F4E1; NAS (exFAT)</text>
+  <text x="830" y="165" text-anchor="middle" fill="#8b949e" font-size="10">/dev/sda2 • /media/scott/NAS</text>
+  <text x="830" y="185" text-anchor="middle" fill="#8b949e" font-size="10">fileserver/ home fileserver</text>
+  <text x="830" y="205" text-anchor="middle" fill="#8b949e" font-size="10">dashcam/ bodycam/ headcam/</text>
+  <text x="830" y="225" text-anchor="middle" fill="#8b949e" font-size="10">neo4j-bkps/ backups/ audio/</text>
+  <text x="830" y="245" text-anchor="middle" fill="#8b949e" font-size="10">Family photo archive</text>
+
+  <!-- Network -->
+  <rect x="980" y="120" width="280" height="140" rx="8" fill="#0d2137" stroke="#fbbf24" stroke-width="1" filter="url(#shadow)"/>
+  <text x="1120" y="145" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="600">&#x1F310; Network</text>
+  <text x="1120" y="165" text-anchor="middle" fill="#8b949e" font-size="10">enp196s0: 192.168.1.241/24</text>
+  <text x="1120" y="185" text-anchor="middle" fill="#8b949e" font-size="10">Gateway: 192.168.1.1</text>
+  <text x="1120" y="205" text-anchor="middle" fill="#8b949e" font-size="10">Tailscale: fd00:4cab:f84b:*</text>
+  <text x="1120" y="225" text-anchor="middle" fill="#8b949e" font-size="10">IPv6: 2603:6080:34f0:*</text>
+  <text x="1120" y="245" text-anchor="middle" fill="#8b949e" font-size="10">LAN: 192.168.1.0/24</text>
+
+  <!-- ======================================== -->
+  <!-- LAYER 2: HOST SERVICES                   -->
+  <!-- ======================================== -->
+  <rect x="40" y="300" width="1520" height="200" rx="12" fill="#1a1a2e" stroke="#a78bfa" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="800" y="325" text-anchor="middle" fill="#a78bfa" font-size="14" font-weight="600" letter-spacing="2">HOST SERVICES (Native)</text>
+
+  <!-- LM Studio -->
+  <rect x="70" y="340" width="260" height="140" rx="8" fill="#1a0f40" stroke="#a78bfa" stroke-width="1" filter="url(#shadow)"/>
+  <text x="200" y="365" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="600">&#x1F9E0; LM Studio</text>
+  <text x="200" y="385" text-anchor="middle" fill="#e6edf3" font-size="10">Local LLM inference server</text>
+  <text x="200" y="405" text-anchor="middle" fill="#8b949e" font-size="10">port: 1234 (OpenAI compat)</text>
+  <text x="200" y="425" text-anchor="middle" fill="#8b949e" font-size="10">GGUF models • quantized</text>
+  <text x="200" y="445" text-anchor="middle" fill="#8b949e" font-size="10">Used by: Hermes Agent</text>
+
+  <!-- Hermes Agent -->
+  <rect x="360" y="340" width="260" height="140" rx="8" fill="#1a0f40" stroke="#a78bfa" stroke-width="1" filter="url(#shadow)"/>
+  <text x="490" y="365" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="600">&#x1F916; Hermes Agent</text>
+  <text x="490" y="385" text-anchor="middle" fill="#e6edf3" font-size="10">hermes-cli gateway + hermes</text>
+  <text x="490" y="405" text-anchor="middle" fill="#8b949e" font-size="10">session store (SQLite/FTS5)</text>
+  <text x="490" y="425" text-anchor="middle" fill="#8b949e" font-size="10">skill system + tool registry</text>
+  <text x="490" y="445" text-anchor="middle" fill="#8b949e" font-size="10">Telegram/Discord/Slack gateway</text>
+
+  <!-- Signal CLI -->
+  <rect x="650" y="340" width="260" height="140" rx="8" fill="#1a0f40" stroke="#a78bfa" stroke-width="1" filter="url(#shadow)"/>
+  <text x="780" y="365" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="600">&#x1F4E7; Signal CLI</text>
+  <text x="780" y="385" text-anchor="middle" fill="#e6edf3" font-size="10">signal-cli native process</text>
+  <text x="780" y="405" text-anchor="middle" fill="#8b949e" font-size="10">/home/scott/.local/bin/signal-cli</text>
+  <text x="780" y="425" text-anchor="middle" fill="#8b949e" font-size="10">config: ~/.local/share/signal-cli</text>
+  <text x="780" y="445" text-anchor="middle" fill="#8b949e" font-size="10">Used by: Container signal-cli</text>
+
+  <!-- Redis -->
+  <rect x="940" y="340" width="260" height="140" rx="8" fill="#1a0f40" stroke="#a78bfa" stroke-width="1" filter="url(#shadow)"/>
+  <text x="1070" y="365" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="600">&#x1F4E6; Redis (Host)</text>
+  <text x="1070" y="385" text-anchor="middle" fill="#e6edf3" font-size="10">dnsmasq user • port 6379</text>
+  <text x="1070" y="405" text-anchor="middle" fill="#8b949e" font-size="10">Nextcloud caching layer</text>
+  <text x="1070" y="425" text-anchor="middle" fill="#8b949e" font-size="10">used by Nextcloud container</text>
+  <text x="1070" y="445" text-anchor="middle" fill="#8b949e" font-size="10">via host network</text>
+
+  <!-- MariaDB -->
+  <rect x="1230" y="340" width="260" height="140" rx="8" fill="#1a0f40" stroke="#a78bfa" stroke-width="1" filter="url(#shadow)"/>
+  <text x="1360" y="365" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="600">&#x1F5C4;&#xFE0F; MariaDB (Host)</text>
+  <text x="1360" y="385" text-anchor="middle" fill="#e6edf3" font-size="10">mariadbd • Nextcloud DB</text>
+  <text x="1360" y="405" text-anchor="middle" fill="#8b949e" font-size="10">--transaction-isolation=READ-COMMITTED</text>
+  <text x="1360" y="425" text-anchor="middle" fill="#8b949e" font-size="10">--binlog-format=ROW</text>
+  <text x="1360" y="445" text-anchor="middle" fill="#8b949e" font-size="10">Used by: Nextcloud container</text>
+
+  <!-- ======================================== -->
+  <!-- LAYER 3: DOCKER SERVICES                 -->
+  <!-- ======================================== -->
+  <rect x="40" y="520" width="1520" height="380" rx="12" fill="#1a1a2e" stroke="#4ade80" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="800" y="545" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="600" letter-spacing="2">DOCKER SERVICES (docker-compose.yml)</text>
+
+  <!-- Docker Compose info -->
+  <rect x="70" y="560" width="1460" height="35" rx="6" fill="#0d2818" stroke="#4ade80" stroke-width="0.5"/>
+  <text x="750" y="582" text-anchor="middle" fill="#8b949e" font-size="11">Project: docker-compose • Networks: internal (bridge) + external (bridge) • Volumes: 9 named</text>
+
+  <!-- Signal CLI Container -->
+  <rect x="70" y="610" width="220" height="140" rx="8" fill="#0d2818" stroke="#4ade80" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="180" y="635" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">&#x1F4E7; signal-cli</text>
+  <text x="180" y="655" text-anchor="middle" fill="#e6edf3" font-size="10">bbernhard/signal-cli</text>
+  <text x="180" y="675" text-anchor="middle" fill="#8b949e" font-size="10">REST API • port 8400</text>
+  <text x="180" y="695" text-anchor="middle" fill="#8b949e" font-size="10">signal-cli-data volume</text>
+  <text x="180" y="715" text-anchor="middle" fill="#8b949e" font-size="10">Network: internal</text>
+  <text x="180" y="735" text-anchor="middle" fill="#8b949e" font-size="10">via nginx proxy</text>
+
+  <!-- Nginx -->
+  <rect x="310" y="610" width="220" height="140" rx="8" fill="#0d2818" stroke="#4ade80" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="420" y="635" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">&#x1F310; nginx</text>
+  <text x="420" y="655" text-anchor="middle" fill="#e6edf3" font-size="10">nginx:alpine • reverse proxy</text>
+  <text x="420" y="675" text-anchor="middle" fill="#8b949e" font-size="10">ports: 80 (HTTP) + 443 (HTTPS)</text>
+  <text x="420" y="695" text-anchor="middle" fill="#8b949e" font-size="10">nginx-config + nginx-data</text>
+  <text x="420" y="715" text-anchor="middle" fill="#8b949e" font-size="10">Network: internal + external</text>
+  <text x="420" y="735" text-anchor="middle" fill="#8b949e" font-size="10">proxy: signal, nextcloud</text>
+
+  <!-- Neo4j -->
+  <rect x="550" y="610" width="220" height="140" rx="8" fill="#0d2818" stroke="#4ade80" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="660" y="635" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">&#x1F578;&#xFE0F; neo4j</text>
+  <text x="660" y="655" text-anchor="middle" fill="#e6edf3" font-size="10">neo4j:5.24 • Graph DB</text>
+  <text x="660" y="675" text-anchor="middle" fill="#8b949e" font-size="10">ports: 7474 (HTTP) + 7687 (Bolt)</text>
+  <text x="660" y="695" text-anchor="middle" fill="#8b949e" font-size="10">GDS plugin enabled</text>
+  <text x="660" y="715" text-anchor="middle" fill="#8b949e" font-size="10">heap: 4G max / 2G initial</text>
+  <text x="660" y="735" text-anchor="middle" fill="#8b949e" font-size="10">data: S drive (/media/scott/S/neo4j)</text>
+
+  <!-- Nextcloud -->
+  <rect x="790" y="610" width="220" height="140" rx="8" fill="#0d2818" stroke="#4ade80" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="900" y="635" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">&#x1F5C4;&#xFE0F; nextcloud</text>
+  <text x="900" y="655" text-anchor="middle" fill="#e6edf3" font-size="10">nextcloud:latest</text>
+  <text x="900" y="675" text-anchor="middle" fill="#8b949e" font-size="10">port 8081 (internal)</text>
+  <text x="900" y="695" text-anchor="middle" fill="#8b949e" font-size="10">/mnt/nas -> NAS fileserver</text>
+  <text x="900" y="715" text-anchor="middle" fill="#8b949e" font-size="10">/mnt/ssd -> S drive</text>
+  <text x="900" y="735" text-anchor="middle" fill="#8b949e" font-size="10">max upload: 10G</text>
+
+  <!-- DB (MariaDB container) -->
+  <rect x="1030" y="610" width="220" height="140" rx="8" fill="#0d2818" stroke="#4ade80" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="1140" y="635" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">&#x1F5C4;&#xFE0F; db</text>
+  <text x="1140" y="655" text-anchor="middle" fill="#e6edf3" font-size="10">mariadb:10.6 • Nextcloud DB</text>
+  <text x="1140" y="675" text-anchor="middle" fill="#8b949e" font-size="10">READ-COMMITTED isolation</text>
+  <text x="1140" y="695" text-anchor="middle" fill="#8b949e" font-size="10">nextcloud-db volume</text>
+  <text x="1140" y="715" text-anchor="middle" fill="#8b949e" font-size="10">Network: internal only</text>
+  <text x="1140" y="735" text-anchor="middle" fill="#8b949e" font-size="10">root/admin users</text>
+
+  <!-- Redis Container -->
+  <rect x="1270" y="610" width="220" height="140" rx="8" fill="#0d2818" stroke="#4ade80" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="1380" y="635" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">&#x1F4E6; redis</text>
+  <text x="1380" y="655" text-anchor="middle" fill="#e6edf3" font-size="10">redis:alpine</text>
+  <text x="1380" y="675" text-anchor="middle" fill="#8b949e" font-size="10">appendonly yes</text>
+  <text x="1380" y="695" text-anchor="middle" fill="#8b949e" font-size="10">redis-data volume</text>
+  <text x="1380" y="715" text-anchor="middle" fill="#8b949e" font-size="10">Network: internal only</text>
+  <text x="1380" y="735" text-anchor="middle" fill="#8b949e" font-size="10">Nextcloud caching</text>
+
+  <!-- Docker Networks -->
+  <rect x="70" y="770" width="1420" height="60" rx="8" fill="#0d2818" stroke="#4ade80" stroke-width="0.5" stroke-dasharray="5,3"/>
+  <text x="750" y="795" text-anchor="middle" fill="#4ade80" font-size="11" font-weight="600">Docker Networks</text>
+  <text x="750" y="818" text-anchor="middle" fill="#8b949e" font-size="10">internal (bridge) • 172.18.0.0/16 • signal-cli, neo4j, nextcloud, db, redis</text>
+  <text x="750" y="838" text-anchor="middle" fill="#8b949e" font-size="10">external (bridge) • 172.19.0.0/16 • nginx (ports 80/443 exposed)</text>
+
+  <!-- ======================================== -->
+  <!-- LAYER 4: DATA FLOWS                      -->
+  <!-- ======================================== -->
+  <rect x="40" y="920" width="1520" height="280" rx="12" fill="#1a1a2e" stroke="#fbbf24" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="800" y="945" text-anchor="middle" fill="#fbbf24" font-size="14" font-weight="600" letter-spacing="2">DATA FLOWS &amp; INTEGRATION</text>
+
+  <!-- Data flow arrows and descriptions -->
+  <text x="70" y="975" fill="#e6edf3" font-size="12" font-weight="600">Signal Flow:</text>
+  <text x="70" y="995" fill="#8b949e" font-size="10">Signal CLI (host) --&gt; signal-cli-rest-api (docker) --&gt; nginx proxy --&gt; external apps</text>
+
+  <text x="70" y="1020" fill="#e6edf3" font-size="12" font-weight="600">Neo4j Graph:</text>
+  <text x="70" y="1040" fill="#8b949e" font-size="10">Neo4j (docker) --&gt; 7474/7687 --&gt; auto-ingest content OS --&gt; relationship graph</text>
+  <text x="70" y="1060" fill="#8b949e" font-size="10">Backups: /media/scott/NAS/fileserver/neo4j-bkps/ (5.1GB + 5.7GB dumps)</text>
+
+  <text x="70" y="1085" fill="#e6edf3" font-size="12" font-weight="600">Nextcloud Storage:</text>
+  <text x="70" y="1105" fill="#8b949e" font-size="10">Nextcloud (docker) --&gt; /mnt/nas (NAS fileserver) + /mnt/ssd (S drive)</text>
+  <text x="70" y="1125" fill="#8b949e" font-size="10">MariaDB (host) --&gt; nextcloud-db volume --&gt; Nextcloud data</text>
+
+  <text x="70" y="1150" fill="#e6edf3" font-size="12" font-weight="600">Auto-Ingest Pipeline:</text>
+  <text x="70" y="1170" fill="#8b949e" font-size="10">bodycam/headcam/dashcam --&gt; auto-ingest/ --&gt; quality_api/ --&gt; Neo4j graph</text>
+  <text x="70" y="1190" fill="#8b949e" font-size="10">content_os/ workflow engine --&gt; proof-backed content runs</text>
+
+  <text x="70" y="1215" fill="#e6edf3" font-size="12" font-weight="600">Paperclip Agent:</text>
+  <text x="70" y="1235" fill="#8b949e" font-size="10">paperclip (S drive) --&gt; Express.js API --&gt; PostgreSQL --&gt; agent adapters</text>
+  <text x="70" y="1255" fill="#8b949e" font-size="10">claude-local/codex-local adapters --&gt; heartbeat protocol</text>
+
+  <!-- ======================================== -->
+  <!-- LAYER 5: GIT REPOS                       -->
+  <!-- ======================================== -->
+  <rect x="40" y="1220" width="1520" height="300" rx="12" fill="#1a1a2e" stroke="#4a9eff" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="800" y="1245" text-anchor="middle" fill="#4a9eff" font-size="14" font-weight="600" letter-spacing="2">GIT REPOS &amp; CODE ORGANIZATION</text>
+
+  <!-- Local repos -->
+  <text x="70" y="1275" fill="#e6edf3" font-size="11" font-weight="600">Local Repos (/home/scott/git/):</text>
+
+  <!-- auto-ingest -->
+  <rect x="70" y="1290" width="240" height="70" rx="6" fill="#0d1537" stroke="#4a9eff" stroke-width="1" filter="url(#shadow)"/>
+  <text x="190" y="1312" text-anchor="middle" fill="#4a9eff" font-size="11" font-weight="600">auto-ingest</text>
+  <text x="190" y="1330" text-anchor="middle" fill="#8b949e" font-size="9">Content OS • Python</text>
+  <text x="190" y="1345" text-anchor="middle" fill="#8b949e" font-size="9">content_os/ quality_api/</text>
+  <text x="190" y="1360" text-anchor="middle" fill="#8b949e" font-size="9">scottjoyner/auto-ingest</text>
+
+  <!-- paperclip -->
+  <rect x="330" y="1290" width="240" height="70" rx="6" fill="#0d1537" stroke="#4a9eff" stroke-width="1" filter="url(#shadow)"/>
+  <text x="450" y="1312" text-anchor="middle" fill="#4a9eff" font-size="11" font-weight="600">paperclip</text>
+  <text x="450" y="1330" text-anchor="middle" fill="#8b949e" font-size="9">Agent orchestration • Node.js</text>
+  <text x="450" y="1345" text-anchor="middle" fill="#8b949e" font-size="9">ui/ server/ cli/ packages/</text>
+  <text x="450" y="1360" text-anchor="middle" fill="#8b949e" font-size="9">S drive + local</text>
+
+  <!-- hermes-agent -->
+  <rect x="590" y="1290" width="240" height="70" rx="6" fill="#0d1537" stroke="#4a9eff" stroke-width="1" filter="url(#shadow)"/>
+  <text x="710" y="1312" text-anchor="middle" fill="#4a9eff" font-size="11" font-weight="600">hermes-agent</text>
+  <text x="710" y="1330" text-anchor="middle" fill="#8b949e" font-size="9">AI Agent framework • Python</text>
+  <text x="710" y="1345" text-anchor="middle" fill="#8b949e" font-size="9">tools/ gateway/ plugins/ skills/</text>
+  <text x="710" y="1360" text-anchor="middle" fill="#8b949e" font-size="9">scottjoyner/hermes-agent (fork)</text>
+
+  <!-- lms -->
+  <rect x="850" y="1290" width="240" height="70" rx="6" fill="#0d1537" stroke="#4a9eff" stroke-width="1" filter="url(#shadow)"/>
+  <text x="970" y="1312" text-anchor="middle" fill="#4a9eff" font-size="11" font-weight="600">lms</text>
+  <text x="970" y="1330" text-anchor="middle" fill="#8b949e" font-size="9">LM Studio homelab</text>
+  <text x="970" y="1345" text-anchor="middle" fill="#8b949e" font-size="9">model management</text>
+  <text x="970" y="1360" text-anchor="middle" fill="#8b949e" font-size="9">scottjoyner/lms</text>
+
+  <!-- Other repos -->
+  <text x="70" y="1385" fill="#e6edf3" font-size="11" font-weight="600">Other GitHub Org Repos:</text>
+
+  <rect x="70" y="1395" width="1420" height="55" rx="6" fill="#0d1537" stroke="#4a9eff" stroke-width="0.5"/>
+  <text x="750" y="1415" text-anchor="middle" fill="#8b949e" font-size="10">scottjoyner/chat (diagrams) • scottjoyner/phonelog • scottjoyner/auto-assist • scottjoyner/tts • scottjoyner/stt</text>
+  <text x="750" y="1435" text-anchor="middle" fill="#8b949e" font-size="10">scottjoyner/llm-geometry • scottjoyner/benchmark-SSD • scottjoyner/rustdesk (fork) • scottjoyner/fleet • scottjoyner/minio-audit</text>
+
+  <!-- ======================================== -->
+  <!-- LAYER 6: AGENT ECOSYSTEM                 -->
+  <!-- ======================================== -->
+  <rect x="40" y="1540" width="1520" height="340" rx="12" fill="#1a1a2e" stroke="#f87171" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="800" y="1565" text-anchor="middle" fill="#f87171" font-size="14" font-weight="600" letter-spacing="2">AGENT ECOSYSTEM &amp; WORKFLOWS</text>
+
+  <!-- Agent workflow diagram -->
+  <rect x="70" y="1580" width="680" height="280" rx="8" fill="#230d15" stroke="#f87171" stroke-width="0.5"/>
+  <text x="410" y="1605" text-anchor="middle" fill="#f87171" font-size="12" font-weight="600">Hermes Agent Workflow</text>
+
+  <rect x="90" y="1620" width="140" height="45" rx="6" fill="#370d23" stroke="#f87171" stroke-width="1"/>
+  <text x="160" y="1640" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">User Input</text>
+  <text x="160" y="1655" text-anchor="middle" fill="#8b949e" font-size="9">Telegram/Discord/CLI</text>
+
+  <rect x="260" y="1620" width="140" height="45" rx="6" fill="#370d23" stroke="#f87171" stroke-width="1"/>
+  <text x="330" y="1640" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">hermes-gateway</text>
+  <text x="330" y="1655" text-anchor="middle" fill="#8b949e" font-size="9">Session routing</text>
+
+  <rect x="430" y="1620" width="140" height="45" rx="6" fill="#370d23" stroke="#f87171" stroke-width="1"/>
+  <text x="500" y="1640" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">AIAgent Loop</text>
+  <text x="500" y="1655" text-anchor="middle" fill="#8b949e" font-size="9">Tool calling + reasoning</text>
+
+  <rect x="600" y="1620" width="140" height="45" rx="6" fill="#370d23" stroke="#f87171" stroke-width="1"/>
+  <text x="670" y="1640" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">LM Provider</text>
+  <text x="670" y="1655" text-anchor="middle" fill="#8b949e" font-size="9">LM Studio (local)</text>
+
+  <!-- Arrow connections -->
+  <line x1="230" y1="1642" x2="260" y2="1642" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <line x1="400" y1="1642" x2="430" y2="1642" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <line x1="570" y1="1642" x2="600" y2="1642" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+
+  <!-- Tool calls -->
+  <rect x="90" y="1680" width="140" height="45" rx="6" fill="#370d23" stroke="#f87171" stroke-width="1"/>
+  <text x="160" y="1700" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Tool Registry</text>
+  <text x="160" y="1715" text-anchor="middle" fill="#8b949e" font-size="9">web/search/file/terminal</text>
+
+  <rect x="260" y="1680" width="140" height="45" rx="6" fill="#370d23" stroke="#f87171" stroke-width="1"/>
+  <text x="330" y="1700" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Skills System</text>
+  <text x="330" y="1715" text-anchor="middle" fill="#8b949e" font-size="9">~/.hermes/skills/</text>
+
+  <rect x="430" y="1680" width="140" height="45" rx="6" fill="#370d23" stroke="#f87171" stroke-width="1"/>
+  <text x="500" y="1700" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Memory Store</text>
+  <text x="500" y="1715" text-anchor="middle" fill="#8b949e" font-size="9">SQLite FTS5 search</text>
+
+  <rect x="600" y="1680" width="140" height="45" rx="6" fill="#370d23" stroke="#f87171" stroke-width="1"/>
+  <text x="670" y="1700" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Cron Jobs</text>
+  <text x="670" y="1715" text-anchor="middle" fill="#8b949e" font-size="9">Scheduled tasks</text>
+
+  <!-- Arrow connections -->
+  <line x1="160" y1="1665" x2="160" y2="1680" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <line x1="330" y1="1665" x2="330" y2="1680" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <line x1="500" y1="1665" x2="500" y2="1680" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+  <line x1="670" y1="1665" x2="670" y2="1680" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+
+  <!-- Paperclip workflow -->
+  <rect x="790" y="1580" width="680" height="280" rx="8" fill="#0d2818" stroke="#4ade80" stroke-width="0.5"/>
+  <text x="1130" y="1605" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="600">Paperclip Agent Orchestration</text>
+
+  <rect x="810" y="1620" width="140" height="45" rx="6" fill="#0d2818" stroke="#4ade80" stroke-width="1"/>
+  <text x="880" y="1640" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Heartbeat</text>
+  <text x="880" y="1655" text-anchor="middle" fill="#8b949e" font-size="9">Scheduler/Event trigger</text>
+
+  <rect x="980" y="1620" width="140" height="45" rx="6" fill="#0d2818" stroke="#4ade80" stroke-width="1"/>
+  <text x="1050" y="1640" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Express API</text>
+  <text x="1050" y="1655" text-anchor="middle" fill="#8b949e" font-size="9">Route + service layer</text>
+
+  <rect x="1150" y="1620" width="140" height="45" rx="6" fill="#0d2818" stroke="#4ade80" stroke-width="1"/>
+  <text x="1220" y="1640" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Adapter</text>
+  <text x="1220" y="1655" text-anchor="middle" fill="#8b949e" font-size="9">claude-local/codex-local</text>
+
+  <rect x="1320" y="1620" width="140" height="45" rx="6" fill="#0d2818" stroke="#4ade80" stroke-width="1"/>
+  <text x="1390" y="1640" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">Agent Process</text>
+  <text x="1390" y="1655" text-anchor="middle" fill="#8b949e" font-size="9">Claude Code / Codex CLI</text>
+
+  <line x1="950" y1="1642" x2="980" y2="1642" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <line x1="1120" y1="1642" x2="1150" y2="1642" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <line x1="1290" y1="1642" x2="1320" y2="1642" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- Paperclip details -->
+  <rect x="810" y="1680" width="300" height="160" rx="6" fill="#0d2818" stroke="#4ade80" stroke-width="0.5"/>
+  <text x="960" y="1700" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="600">Paperclip Architecture</text>
+  <text x="830" y="1720" fill="#8b949e" font-size="9">React UI (Vite 6)</text>
+  <text x="830" y="1735" fill="#8b949e" font-size="9">Express.js 5 API</text>
+  <text x="830" y="1750" fill="#8b949e" font-size="9">PostgreSQL 17 + Drizzle ORM</text>
+  <text x="830" y="1765" fill="#8b949e" font-size="9">Better Auth (sessions + API keys)</text>
+  <text x="830" y="1780" fill="#8b949e" font-size="9">pnpm 9 workspaces</text>
+  <text x="830" y="1795" fill="#8b949e" font-size="9">Adapters: Claude Code, Codex,</text>
+  <text x="845" y="1808" fill="#8b949e" font-size="9">Process, HTTP, OpenClaw</text>
+
+  <rect x="1140" y="1680" width="300" height="160" rx="6" fill="#0d2818" stroke="#4ade80" stroke-width="0.5"/>
+  <text x="1290" y="1700" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="600">Auto-Ingest Pipeline</text>
+  <text x="1160" y="1720" fill="#8b949e" font-size="9">bodycam/headcam/dashcam</text>
+  <text x="1160" y="1735" fill="#8b949e" font-size="9">video footage (NAS)</text>
+  <text x="1160" y="1750" fill="#8b949e" font-size="9">auto-ingest/ quality_api/</text>
+  <text x="1160" y="1765" fill="#8b949e" font-size="9">transcript_service/</text>
+  <text x="1160" y="1780" fill="#8b949e" font-size="9">content_os/ workflow engine</text>
+  <text x="1160" y="1795" fill="#8b949e" font-size="9">Neo4j relationship graph</text>
+  <text x="1160" y="1810" fill="#8b949e" font-size="9">lifecycle: captured -&gt; published</text>
+
+  <!-- ======================================== -->
+  <!-- LAYER 7: INFRASTRUCTURE SUMMARY          -->
+  <!-- ======================================== -->
+  <rect x="40" y="1900" width="1520" height="100" rx="12" fill="#1a1a2e" stroke="#8b949e" stroke-width="1"/>
+  <text x="800" y="1925" text-anchor="middle" fill="#8b949e" font-size="12" font-weight="600">Infrastructure Summary</text>
+  <text x="800" y="1945" text-anchor="middle" fill="#6e7681" font-size="10">Server: x1-370 • OS: Ubuntu 24.04 LTS • CPU: 24 cores • RAM: 91 GB • Storage: NVMe + NAS (exFAT) + S Drive (NTFS SSD)</text>
+  <text x="800" y="1965" text-anchor="middle" fill="#6e7681" font-size="10">Docker: 6 services (signal-cli, nginx, neo4j, nextcloud, db, redis) • Network: 192.168.1.241/24 + Tailscale • Agent: Hermes + Paperclip</text>
+  <text x="800" y="1985" text-anchor="middle" fill="#6e7681" font-size="10">Data: NAS fileserver (dashcam/bodycam/headcam/audio/transcriptions/neo4j-bkps/backups/family-photos) • S Drive (neo4j data + paperclip repo)</text>
+</svg>
