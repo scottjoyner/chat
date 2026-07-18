@@ -146,7 +146,7 @@ Staging Strategy:
 │ Staging: docker compose -f docker-compose.yml down && up                    │
 │ Rollback: docker compose down && docker pull old                            │
 │ Data safety: NAS backups before any change                                  │
-│ Neo4j: backup to /media/scott/NAS/fileserver/neo4j-bkps/ before upgrade    │
+│ Neo4j: backup to /media/scott/NAS5/fileserver/neo4j-bkps/ before upgrade    │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┤
@@ -195,7 +195,7 @@ Deployment Methods by Service:
 ┌─────────────────────────────────────────────────────────────────────────────┤
 │ Neo4j (Special)                                                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ Pre-deploy: neo4j-admin dump --to=/media/scott/NAS/fileserver/neo4j-bkps/   │
+│ Pre-deploy: neo4j-admin dump --to=/media/scott/NAS5/fileserver/neo4j-bkps/   │
 │ Post-deploy: neo4j-admin restore --from=/path/to/backup                     │
 │ Data path: /media/scott/S/neo4j/data (S drive, NOT Docker volume)          │
 │ Logs: /media/scott/S/neo4j/logs                                             │
@@ -253,7 +253,7 @@ Verification by Service:
 │ curl http://localhost:80/ → nginx responds                                  │
 │ curl http://localhost:7474/ → Neo4j responds                                │
 │ docker compose logs --tail=50 → no errors                                   │
-│ NAS backup exists → /media/scott/NAS/fileserver/neo4j-bkps/                 │
+│ NAS backup exists → /media/scott/NAS5/fileserver/neo4j-bkps/                 │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┤
@@ -370,7 +370,7 @@ Monitoring by Service:
 │                                                                             │
 │  Neo4j:                                                                     │
 │  1. docker compose down                                                     │
-│  2. Restore from /media/scott/NAS/fileserver/neo4j-bkps/                    │
+│  2. Restore from /media/scott/NAS5/fileserver/neo4j-bkps/                    │
 │  3. docker compose up -d                                                    │
 │  4. Verify graph integrity                                                   │
 │                                                                             │
@@ -401,7 +401,7 @@ Monitoring by Service:
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  Before ANY deployment:                                                     │
-│  □ Verify NAS mount: /media/scott/NAS/fileserver/ is mounted                │
+│  □ Verify NAS mount: /media/scott/NAS5/fileserver/ is mounted                │
 │  □ Verify S drive mount: /media/scott/S/ is mounted                         │
 │  □ Check disk space: df -h (ensure >20% free)                              │
 │  □ Check RAM: free -h (ensure >10GB available)                             │
@@ -418,7 +418,7 @@ Monitoring by Service:
 │  ✓ Nextcloud accessible: curl http://localhost:8081/                        │
 │  ✓ Paperclip API health: curl http://localhost:<port>/health                │
 │  ✓ Hermes gateway running: hermes-cli status                                │
-│  ✓ NAS files accessible: ls /media/scott/NAS/fileserver/                    │
+│  ✓ NAS files accessible: ls /media/scott/NAS5/fileserver/                    │
 │  ✓ S drive files accessible: ls /media/scott/S/                             │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘

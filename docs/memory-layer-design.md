@@ -1,5 +1,6 @@
 # Hermes Agent Knowledge Graph — Memory Layer Design
 
+
 ## Overview
 
 This document defines the schema and architecture for a shared memory layer across the Hermes Agent network. The knowledge graph will serve as a persistent, queryable memory system that every agent can access — enabling cross-agent memory sharing, skill discovery, documentation lookup, and context-aware responses.
@@ -11,7 +12,7 @@ This document defines the schema and architecture for a shared memory layer acro
 - **Vector indexes** already exist for: DashcamEmbedding, DetectedObject, Frame, Segment, GlobalSpeaker, Transcription, Utterance
 - **Password**: `knowledge_graph_2026`
 - **Data path**: `/media/scott/S/neo4j/data` (S drive)
-- **Backups**: `/media/scott/NAS1/fileserver/neo4j-bkps/`
+- **Backups**: `/media/scott/NAS5/fileserver/neo4j-bkps/`
 
 ## Design Considerations
 

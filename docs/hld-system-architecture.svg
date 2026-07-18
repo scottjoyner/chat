@@ -243,7 +243,7 @@
 
   <text x="70" y="1020" fill="#e6edf3" font-size="12" font-weight="600">Neo4j Graph:</text>
   <text x="70" y="1040" fill="#8b949e" font-size="10">Neo4j (docker) --&gt; 7474/7687 --&gt; auto-ingest content OS --&gt; relationship graph</text>
-  <text x="70" y="1060" fill="#8b949e" font-size="10">Backups: /media/scott/NAS/fileserver/neo4j-bkps/ (5.1GB + 5.7GB dumps)</text>
+  <text x="70" y="1060" fill="#8b949e" font-size="10">Backups: /media/scott/NAS5/fileserver/neo4j-bkps/ (5.1GB + 5.7GB dumps)</text>
 
   <text x="70" y="1085" fill="#e6edf3" font-size="12" font-weight="600">Nextcloud Storage:</text>
   <text x="70" y="1105" fill="#8b949e" font-size="10">Nextcloud (docker) --&gt; /mnt/nas (NAS fileserver) + /mnt/ssd (S drive)</text>
