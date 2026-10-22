@@ -1,5 +1,12 @@
 # TTSBench + TTS Agent Orchestrator (v2)
 
+<!-- repo-entrypoint-guide:start -->
+> **Start here:** This repository combines `ttsbench` utilities with the `tts_agent` realtime speech/task orchestrator. Begin with [v2 Orchestrator Tree](#v2-orchestrator-tree-newupdated), [Replay + dedupe behavior](#replay--dedupe-behavior), and [Cancellation + barge-in test flow](#cancellation--barge-in-test-flow).
+> 
+> **Operations:** Treat STT, task submission, and spoken responses as separate observable stages; validate deduplication and cancellation before accepting autonomous tool execution.
+<!-- repo-entrypoint-guide:end -->
+
+
 This repository contains:
 
 1. `ttsbench`: benchmarking/training utilities.
