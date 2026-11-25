@@ -10,7 +10,7 @@ This document defines the schema and architecture for a shared memory layer acro
 - **Neo4j 5.24** on `x1-370` (primary)
 - **80M+ nodes** currently (PhoneLog: 19.9M, DashcamEmbedding: 4.2M, YOLODetection: 4.1M, Frame: 3.7M, etc.)
 - **Vector indexes** already exist for: DashcamEmbedding, DetectedObject, Frame, Segment, GlobalSpeaker, Transcription, Utterance
-- **Password**: `knowledge_graph_2026`
+- **Password**: `<neo4j-password>`
 - **Data path**: `/media/scott/S/neo4j/data` (S drive)
 - **Backups**: `/media/scott/NAS5/fileserver/neo4j-bkps/`
 
